@@ -12,8 +12,8 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 600)     #kamera felbontás, magasság
 cv2.namedWindow("Trackbars")
     
 
-cv2.createTrackbar("L - H", "Trackbars", 170, 179, nothing)
-cv2.createTrackbar("L - S", "Trackbars", 55, 255, nothing)
+cv2.createTrackbar("L - H", "Trackbars", 0, 179, nothing)
+cv2.createTrackbar("L - S", "Trackbars", 0, 255, nothing)
 cv2.createTrackbar("L - V", "Trackbars", 0, 255, nothing)
 cv2.createTrackbar("U - H", "Trackbars", 179, 179, nothing)
 cv2.createTrackbar("U - S", "Trackbars", 255, 255, nothing)
@@ -21,7 +21,7 @@ cv2.createTrackbar("U - V", "Trackbars", 255, 255, nothing)
 
 cTime = 0
 pTime = 0 
-
+new_q = [300, 400]
 while True:
    
     _, frame = cap.read()
@@ -56,13 +56,35 @@ while True:
         
         result_middle = cv2.circle(frame, centerOfCircle, radius=3, color=(0,255,0), thickness=(2))  #Téglalap középpontjának kirajzolása
 
-        print(Circle_x_cord, Circle_y_cord)    #Tárgy középpontjának a koordinátáinak kiírása
+        #print(Circle_x_cord, Circle_y_cord)    #Tárgy középpontjának a koordinátáinak kiírása
         #time.sleep(0.15)
 
 
 
         #rtde_c = rtde_control.RTDEControlInterface("10.22.0.91")
+        #rtde_r = rtde_receive.RTDEReceiveInterface("10.22.0.91")
+
+        #actual_q = rtde_r.getActualQ()
+        
+        
+        
+
+        # if new_q[0] > Circle_x_cord:
+
+        #         new_q[0]= new_q[0]- 1
+        #         round(new_q[0], 3)
+
+        # if new_q[1] > Circle_y_cord:
+        #         new_q[1] = new_q[1] - 1
+        #         round(new_q[1], 3)      #400--> 399.99
+
+        # time.sleep(0.1)
+
+        # print(new_q)
+
         #rtde_c.moveL([float(Circle_y_cord*0.95),float(Circle_x_cord*1.02), 0.3, 3.14, 0, 0], 0.2, 0.2)
+
+
     
 
     #fps counter
