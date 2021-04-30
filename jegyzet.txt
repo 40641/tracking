@@ -35,3 +35,31 @@ while True:
             x = x + .1
             y = y - .1
 
+
+
+
+
+    if x > 0 and y > 0:
+        while  center - threshold >= actual_tcp_pose[0] <= center + threshold and center - threshold >= actual_tcp_pose[1] <= center + threshold:
+
+    elif x > 0 and y < 0:
+        while  center - threshold >= actual_tcp_pose[0] <= center + threshold and center - threshold >= actual_tcp_pose[1] <= center + threshold:
+
+
+
+    elif x < 0 and y < 0:
+        while  center - threshold >= actual_tcp_pose[0] <= center + threshold and center - threshold >= actual_tcp_pose[1] <= center + threshold:
+            
+
+
+    elif x < 0 and y > 0:
+        while  center - threshold >= actual_tcp_pose[0] <= center + threshold and center - threshold >= actual_tcp_pose[1] <= center + threshold:
+
+
+
+
+    print("dsa")
+
+
+        actual_tcp_pose = rtde_r.getActualTCPPose()
+

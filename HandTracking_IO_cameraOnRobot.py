@@ -72,11 +72,12 @@ def main():
     
     detector = handDetector()
 
-
+    center = 0
+    threshold = 0.01
         
-    
+    actual_tcp_pose = rtde_r.getActualTCPPose()
     while True:
-        #actual_tcp_pose = rtde_r.getActualTCPPose()
+        
 
         success, img = cap.read()
         img = detector.findHands(img)
@@ -84,8 +85,8 @@ def main():
         lmList = detector.findPosition(img)
         if len(lmList) != 0:
                        
-            x_cord = lmList[0][0]
-            y_cord = lmList[0][1]
+            x_cord = lmList[0][0] - 0.320
+            y_cord = lmList[0][1] *(-1) + 0.170
 
             x1_cord = lmList[4][0]
             y1_cord = lmList[4][1]
@@ -95,7 +96,7 @@ def main():
 
             lenght = round(math.sqrt((x2_cord-x1_cord)**2+(y2_cord-y1_cord)**2), 3)
 
-            rtde_c.moveL([float(x_cord), -0.500, float(y_cord) , 3.14, 0, 0], 1, 1)
+            #rtde_c.moveL([float(x_cord), -0.500, float(y_cord) , 3.14, 0, 0], 1, 1)
 
             if lenght < 0.06:
                 rtde__IO.setStandardDigitalOut(6, False)
@@ -106,9 +107,47 @@ def main():
                 rtde__IO.setStandardDigitalOut(6, True)
                 gripper = "open"
 
-            time.sleep(0.01)
+            if x_cord >= center+threshold and y_cord >= center+threshold:
 
-            print(gripper)
+                actual_tcp_pose[0] = actual_tcp_pose[0]+0.001
+                actual_tcp_pose[1] = actual_tcp_pose[1]+0.001
+
+                rtde_c.moveL([actual_tcp_pose[0], actual_tcp_pose[1], 0.400 , 3.14, 0, 0], 1, 1)
+
+                print(actual_tcp_pose[0], actual_tcp_pose[1], round(x_cord, 3), round(y_cord, 3), gripper)
+
+            if x_cord >= center+threshold and y_cord <= center-threshold:
+                    actual_tcp_pose[0] = actual_tcp_pose[0]+0.001
+                    actual_tcp_pose[1] = actual_tcp_pose[1]-0.001
+
+                    rtde_c.moveL([actual_tcp_pose[0], actual_tcp_pose[1], 0.400 , 3.14, 0, 0], 1, 1)
+
+                    print(actual_tcp_pose[0], actual_tcp_pose[1], round(x_cord, 3), round(y_cord, 3), gripper)
+
+
+
+            if x_cord <= center-threshold and y_cord <= center-threshold:
+                    actual_tcp_pose[0] = actual_tcp_pose[0]-0.001
+                    actual_tcp_pose[1] = actual_tcp_pose[1]-0.001
+
+                    rtde_c.moveL([actual_tcp_pose[0], actual_tcp_pose[1], 0.400 , 3.14, 0, 0], 1, 1)
+
+                    print(actual_tcp_pose[0], actual_tcp_pose[1], round(x_cord, 3), round(y_cord, 3), gripper)
+
+
+
+
+            if x_cord <= center-threshold and y_cord >= center+threshold:
+                    actual_tcp_pose[0] = actual_tcp_pose[0]-0.001
+                    actual_tcp_pose[1] = actual_tcp_pose[1]+0.001
+
+                    rtde_c.moveL([actual_tcp_pose[0], actual_tcp_pose[1], 0.400 , 3.14, 0, 0], 1, 1)
+
+                    print(actual_tcp_pose[0], actual_tcp_pose[1], round(x_cord, 3), round(y_cord, 3), gripper)
+
+            
+
+            
             #print(x_cord, y_cord)
             #print(lenght)
         cTime = time.time()
