@@ -1,6 +1,12 @@
-traktor = [100, 40, 312, 321, 3.213]
+import time
 
-szar = traktor[:]
-szar[0] += 10
+asd = 10
+dfg = 20
 
-print(szar)
+while asd>0:
+    asd=asd-1
+    time.sleep(1)
+    #print(asd)
+
+print("dsa")
+

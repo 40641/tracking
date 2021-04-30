@@ -56,10 +56,6 @@ while True:
         
         result_middle = cv2.circle(frame, centerOfCircle, radius=3, color=(0,255,0), thickness=(2))  #Téglalap középpontjának kirajzolása
 
-        if Circle_x_cord > 0:
-            
-            rdte.moveL
-
         print(Circle_x_cord, Circle_y_cord)    #Tárgy középpontjának a koordinátáinak kiírása
         #time.sleep(0.15)
 
