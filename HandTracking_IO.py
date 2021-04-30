@@ -2,6 +2,8 @@ import cv2
 import mediapipe as mp
 import time
 import rtde_control
+import rtde_receive
+import rtde_io
 import math
 
 
@@ -60,7 +62,8 @@ class handDetector():
 def main():
     pTime = 0
     cTime = 0
-    #rtde_c = rtde_control.RTDEControlInterface("10.22.0.91")
+    rtde_c = rtde_control.RTDEControlInterface("192.168.88.129")
+    rtde__IO = rtde_io.RTDEIOInterface("192.168.88.129")
 
     cap = cv2.VideoCapture(-1)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 564)      #kamera felbontás, szélesség
@@ -92,9 +95,11 @@ def main():
             #rtde_c.moveL([float(x_cord),-0.500, float(y_cord) , 3.14, 0, 0], 0.5, 0.3)
 
             if lenght < 0.06:
-                print("zárva")
+                rtde__IO.setStandardDigitalOut(7, True)
+                print("zárva", x_cord, y_cord)
             else:
-                print("nyitva")
+                rtde__IO.setStandardDigitalOut(7, False)
+                print("nyitva", x_cord, y_cord)
 
             time.sleep(0.01)
 
