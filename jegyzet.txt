@@ -1,0 +1,37 @@
+Hand Tracking a kamera a roboton: 
+
+A kamera középpontját a képernyő közepére állítottam.
+A robot x és z koordinátáját addig kell növelni illetve csökkenteni amíg a kamera x és z értéke = 0+-20
+
+Első lépésben:
+
+
+while True:
+
+
+    pose=get_TCP_pose()
+
+    if x > 0 and y>0:
+        while x = 0 and y = 0:
+            x = x - .1
+            y = y - .1
+
+    if x>0 and y<0:
+            while x = 0 and y = 0:
+            x = x - .1
+            y = y + .1
+
+
+
+    if x < 0 and y < 0:
+            while x = 0 and y = 0:
+            x = x + .1
+            y = y + .1
+
+
+
+    if x < 0 and y > 0:
+            while x = 0 and y = 0:
+            x = x + .1
+            y = y - .1
+
