@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import time
 import rtde_control
+import rtde_receive
 
 def nothing(x):
     pass
@@ -22,6 +23,12 @@ cv2.createTrackbar("U - V", "Trackbars", 255, 255, nothing)
 cTime = 0
 pTime = 0 
 
+center = 0
+threshold = 0.02
+
+rtde_c = rtde_control.RTDEControlInterface("192.168.88.129")
+rtde_r = rtde_receive.RTDEReceiveInterface("192.168.88.129")
+actual_tcp_pose = rtde_r.getActualTCPPose()
 while True:
    
     _, frame = cap.read()
@@ -53,18 +60,54 @@ while True:
         centerOfCircle =((xg+xg+wg)//2, (yg+yg+hg)//2)
         Circle_x_cord = round(centerOfCircle[0] / 1000 , 3)      
         Circle_y_cord = round(centerOfCircle[1] /1000 , 3)  #Kör középpontja eltolva, kamerafelbontás módosítás esetén módosítani kell
-        
+        Circle_x_cord = Circle_x_cord - 0.424
+        Circle_y_cord = Circle_y_cord*(-1)+0.24
         result_middle = cv2.circle(frame, centerOfCircle, radius=3, color=(0,255,0), thickness=(2))  #Téglalap középpontjának kirajzolása
 
-        print(Circle_x_cord, Circle_y_cord)    #Tárgy középpontjának a koordinátáinak kiírása
-        #time.sleep(0.15)
+        #actual_tcp_pose = rtde_r.getActualTCPPose()
+
+    if Circle_x_cord >= center+threshold and Circle_y_cord >= center+threshold:
+
+            actual_tcp_pose[0] = actual_tcp_pose[0]+0.001
+            actual_tcp_pose[1] = actual_tcp_pose[1]+0.001
+
+            rtde_c.moveL([actual_tcp_pose[0], actual_tcp_pose[1], 0.400 , 3.14, 0, 0], 1, 1)
+
+            print(actual_tcp_pose[0], actual_tcp_pose[1], round(Circle_x_cord, 3), round(Circle_y_cord, 3))
+
+    if Circle_x_cord >= center+threshold and Circle_y_cord <= center-threshold:
+            actual_tcp_pose[0] = actual_tcp_pose[0]+0.001
+            actual_tcp_pose[1] = actual_tcp_pose[1]-0.001
+
+            rtde_c.moveL([actual_tcp_pose[0], actual_tcp_pose[1], 0.400 , 3.14, 0, 0], 1, 1)
+
+            print(actual_tcp_pose[0], actual_tcp_pose[1], round(Circle_x_cord, 3), round(Circle_y_cord, 3))
 
 
 
-        #rtde_c = rtde_control.RTDEControlInterface("10.22.0.91")
+    if Circle_x_cord <= center-threshold and Circle_y_cord <= center-threshold:
+            actual_tcp_pose[0] = actual_tcp_pose[0]-0.001
+            actual_tcp_pose[1] = actual_tcp_pose[1]-0.001
 
-        #rtde_c.moveL([float(Circle_y_cord*0.95),float(Circle_x_cord*1.02), 0.3, 3.14, 0, 0], 0.2, 0.2)
+            rtde_c.moveL([actual_tcp_pose[0], actual_tcp_pose[1], 0.400 , 3.14, 0, 0], 1, 1)
+
+            print(actual_tcp_pose[0], actual_tcp_pose[1], round(Circle_x_cord, 3), round(Circle_y_cord, 3))
+
+
+
+
+    if Circle_x_cord <= center-threshold and Circle_y_cord >= center+threshold:
+            actual_tcp_pose[0] = actual_tcp_pose[0]-0.001
+            actual_tcp_pose[1] = actual_tcp_pose[1]+0.001
+
+            rtde_c.moveL([actual_tcp_pose[0], actual_tcp_pose[1], 0.400 , 3.14, 0, 0], 1, 1)
+
+            print(actual_tcp_pose[0], actual_tcp_pose[1], round(Circle_x_cord, 3), round(Circle_y_cord, 3))
+
+    time.sleep(0.00)
     
+
+
 
     #fps counter
     cTime = time.time()
