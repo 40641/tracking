@@ -60,6 +60,8 @@ class handDetector():
 
 
 def main():
+
+    Offset = 0.0001
     pTime = 0
     cTime = 0
     rtde_c = rtde_control.RTDEControlInterface("192.168.88.129")
@@ -108,29 +110,29 @@ def main():
                 gripper = "open"
 #--------------------------------------------------------------------------------------------------------- 
             if x_cord >= center+threshold:
-                actual_tcp_pose[0]=actual_tcp_pose[0]+0.001
+                actual_tcp_pose[0]=actual_tcp_pose[0]+Offset
                 rtde_c.moveL([actual_tcp_pose[0], actual_tcp_pose[1], 0.400 , 3.14, 0, 0], 1, 1)
                 #print("1")
 #---------------------------------------------------------------------------------------------------------                 
             if y_cord >= center+threshold:
-                actual_tcp_pose[1]=actual_tcp_pose[1]+0.001
+                actual_tcp_pose[1]=actual_tcp_pose[1]+Offset
                 rtde_c.moveL([actual_tcp_pose[0], actual_tcp_pose[1], 0.400 , 3.14, 0, 0], 1, 1)
                 #print("2")
   #---------------------------------------------------------------------------------------------------------          
             if y_cord <= center-threshold:
-                actual_tcp_pose[1]=actual_tcp_pose[1]-0.001
+                actual_tcp_pose[1]=actual_tcp_pose[1]-Offset
                 rtde_c.moveL([actual_tcp_pose[0], actual_tcp_pose[1], 0.400 , 3.14, 0, 0], 1, 1)
                 #print("3")
   #--------------------------------------------------------------------------------------------------------- 
             if x_cord <= center-threshold:
 
-                actual_tcp_pose[0]=actual_tcp_pose[0]-0.001
+                actual_tcp_pose[0]=actual_tcp_pose[0]-Offset
                 rtde_c.moveL([actual_tcp_pose[0], actual_tcp_pose[1], 0.400 , 3.14, 0, 0], 1, 1)
                 #print("4")           
   #--------------------------------------------------------------------------------------------------------- 
             
 
-            print(actual_tcp_pose[0], actual_tcp_pose[1], x_cord, y_cord)
+            print(f"robot_x_poz={actual_tcp_pose[0]}, robot_y_poz={actual_tcp_pose[1]}, kéz_x_kord={x_cord},kéz_y_kord={y_cord}, megfogó= {gripper}")
             
             #print(x_cord, y_cord)
             #print(lenght)
